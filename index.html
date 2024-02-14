@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>att-göra-listan</title>
+  <link rel="stylesheet" href="https://use.typekit.net/bxh3ejd.css">
+  <link rel="icon" type="image/x-icon" href="https://cdn.glitch.global/f1e280bc-04eb-4372-991f-5d5c2d5c8c94/Blue_checkbox-checked.svg.png?v=1707914603950">
   <style>
     body {
       display: flex;
@@ -11,13 +13,18 @@
       align-items: center;
       height: 100vh;
       margin: 0;
+      font-family: permanent-marker, sans-serif;
+      color: red;
+      font-style: normal;
+      font-weight: 400;
     }
     .centered-image {
-      max-width: 100%;
-      max-height: 100%;
+      max-width: 200%;
+      max-height: 200%;
+      overflow: hidden;
       position: relative;
     }
-    .todo-wrapper {
+    .todo-list {
       position: absolute;
       top: 50%;
       left: 50%;
@@ -28,43 +35,150 @@
       display: flex;
       align-items: center;
       margin-bottom: 10px;
+      font-size: 25px; /* Standard textstorlek */
+      z-index: 2;
     }
     .todo-item input[type="checkbox"] {
-      margin-right: 10px;
+      margin-right: 20px;
+      transform: scale(2); /* Skalar upp checkboxen */
+      display: none; /* Göm checkboxen som standard */
     }
-    .background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      z-index: 0;
+    .new-text {
+      margin-left: 20px;
+    }
+    /* Ladda in ditt typsnitt från en extern URL */
+    @font-face {
+      font-family: 'permanent-marker', sans-serif;
+      font-style: normal;
+      font-weight: 400;
+    }
+    .footer1 a{
+      font-family: arial;
+      position: fixed;
+      bottom: 500px; /* Justera avståndet från botten */
+      left: 20px; /* Justera avståndet från vänster */
+      width: auto; /* Anpassa bredden automatiskt */
+      color: red; /* Ändra textfärgen till röd */
+      text-align: left;
+      padding: 10px 20px; /* Justera inre utfyllnad för bättre läsbarhet */
+      font-size: 10px;
+    }
+    .footer2 a{
+      font-family: arial;
+      position: fixed;
+      bottom: 500px; /* Justera avståndet från botten */
+      right: 20px; /* Justera avståndet från höger */
+      width: auto; /* Anpassa bredden automatiskt */
+      color: red; /* Ändra textfärgen till röd */
+      text-align: right;
+      padding: 10px 20px; /* Justera inre utfyllnad för bättre läsbarhet */
+      font-size: 10px;
+    }
+    .footerMITTEN {
+      font-family: arial;
+      position: fixed;
+      bottom: 50px; /* Justera avståndet från botten */
+      left: 50%; /* Justera till mitten */
+      transform: translateX(-50%); /* Centrera horisontellt */
+      color: red; /* Ändra textfärgen till röd */
+      padding: 10px 20px; /* Justera inre utfyllnad för bättre läsbarhet */
+      font-size: 10px;
+      z-index: 4;
+    }
+    .footerMITTEN a {
+      color: red;
     }
   </style>
 </head>
 <body>
-  <div class="centered-image">
-    <img src="https://cdn.glitch.global/f1e280bc-04eb-4372-991f-5d5c2d5c8c94/post-itA4.png?v=1707730792194" alt="Your Image" class="background">
-    <div class="todo-wrapper">
-      <div class="todo-item">
-        <input type="checkbox" id="item1">
-        <label for="item1">Att göra 1</label>
-      </div>
-      <div class="todo-item">
-        <input type="checkbox" id="item2">
-        <label for="item2">Att göra 2</label>
-      </div>
-      <div class="todo-item">
-        <input type="checkbox" id="item3">
-        <label for="item3">Att göra 3</label>
-      </div>
-      <div class="todo-item">
-        <input type="checkbox" id="item4">
-        <label for="item4">Att göra 4</label>
-      </div>
-      <div class="todo-item">
-        <input type="checkbox" id="item5">
-        <label for="item5">Att göra 5</label>
-      </div>
+  <div class="footer1">
+    <a href="http://ai-robot-rom.com/">Previous</a>
+  </div>
+  <div class="footer2">
+    <a href="http://bitch-slap.online/">Next</a>
+  </div>
+  <div class="footerMITTEN">
+    <span>This Single Service Site is based on the </span>
+    <a href="https://en.wikipedia.org/wiki/User_Friendly">User Friendly Wikipedia Entry</a>
+    <span> and a part of the</span> <a href="https://en.wikipedia.org/wiki/User_Friendly">Artificial Intelligence Webring</a>
+  </div>
+
+  <img src="https://cdn.glitch.global/f1e280bc-04eb-4372-991f-5d5c2d5c8c94/post-itA4.png?v=1707730792194" alt="Your Image" class="centered-image">
+  <div class="todo-list">
+    <!-- Ersätt den första rutan utan text med en knapp -->
+    <button id="startButton" onclick="startTask()">Start</button>
+    <div class="todo-item">
+      <input type="checkbox" id="item1" disabled>
+      <span class="new-text"></span>
     </div>
   </div>
+
+
+  <!-- Lägg till ljudfilen och dölj den -->
+  <audio id="clickSound" src="https://cdn.glitch.global/f1e280bc-04eb-4372-991f-5d5c2d5c8c94/mixkit-clear-mouse-clicks-2997.wav?v=1707915097680" style="display: none;"></audio>
+
+  <script>
+    var newTexts = [
+      "Hämta Hjalmar på föris",
+      "Köpa kattgräs till Tussan<3",
+      "Boka hot tabata",
+      "Ringa mamma!!",
+      "Storhandla på seniortisdag",
+      "Dumpa min kille",
+      "Mata hamstern Per",
+      "Boka en charterresa",
+      "Busringa hos grannen",
+      "Köpa lördagsgodis",
+      "Rensa all skräppost",
+      "Mejla styrelsekärringen",
+      "Ghosta tinderdejt",
+      "Hämta ut paket:)",
+      "Glömma Hjalmar på föris",
+      "Ringa kronofogden",
+      "Köpa svindyr SL-biljett",
+      "Trimma raggarsträngen",
+      "Slänga sura mjölken",
+      "Sno grannens tvättid",
+      "Gå med panten till ICA",
+      "Städa äckliga kylen",
+      "Sy fast skjortknappen",
+      "Göra deppiga matlådor",
+      "Radera TikTok!",
+      "Säga upp mig:D",
+      "Pumpa cykeln..",
+    ]; // Lista med alternativa texter
+
+    var clickCount = 0; // Variabel för att hålla koll på antalet klick
+
+    // Funktion för att starta uppgiften och aktivera checkboxen
+    function startTask() {
+      var checkbox = document.getElementById("item1");
+      checkbox.disabled = false; // Aktivera checkboxen
+      checkbox.style.display = "inline-block"; // Visa checkboxen
+
+      // Lägg till en händelselyssnare på checkboxen för att byta text när den klickas
+      checkbox.addEventListener("click", function() {
+        var newSpan = document.querySelector('.new-text'); // Hitta det span-elementet som ska innehålla den nya texten
+
+        clickCount++; // Öka räknaren för antalet klick
+
+        var newTextIndex = (clickCount - 1) % newTexts.length; // Beräkna index för nästa text baserat på antalet klick
+
+        newSpan.textContent = newTexts[newTextIndex]; // Byt ut texten till den nya texten
+
+        setTimeout(function() {
+          checkbox.checked = false; // Avmarkera checkboxen efter en millisekund
+        }, 100);
+
+        // Spela ljudet när användaren klickar
+        var clickSound = document.getElementById("clickSound");
+        clickSound.play();
+      });
+
+      // Dölj startknappen efter att den har klickats på
+      var startButton = document.getElementById("startButton");
+      startButton.style.display = "none";
+    }
+  </script>
 </body>
 </html>
